@@ -88,6 +88,7 @@ def new_simulated_session(request, hide_bar=False):
             simulated_session.save()
         except IntegrityError:
             pass
+        request.session['_is_simulated_user_session'] = True
 
     return request
 
@@ -155,39 +156,44 @@ def coordinate_request_with_simulated_session(request):
     - HttpRequest: Modified request object.
     """
     request.real_user = getattr(request, 'real_user', request.user)
+    _is_simulated_user_session = getattr(request.session, '_is_simulated_user_session', False)
     if app_settings.ENABLE_SIMULATE_USER:
         session_key = request.session.session_key
-        simulated_session = SimulatedUserSession.objects.filter(
-            simulated_session_key=session_key
-        ).first()
-        if simulated_session and simulated_session.closed_at:
-            request.real_user = simulated_session.real_user
-            simulated_session = None
-
-        if simulated_session:
-            simulated_session.save()
-            active_simulated_session = SimulatedUserSession.objects.filter(
-                simulated_session_key=session_key, closed_at__isnull=True
+        if _is_simulated_user_session:
+            simulated_session = SimulatedUserSession.objects.filter(
+                simulated_session_key=session_key
             ).first()
-            if active_simulated_session and not simulated_session.hide_bar:
-                request.real_user = active_simulated_session.real_user
-                if active_simulated_session.simulated_user is None:
-                    request = change_user(request, AnonymousUser())
-                    log_simulated_action(
-                        request,
-                        active_simulated_session,
-                        f"{request.real_user.username} simulating AnonymousUser accessed {request.path}"
-                    )
-                else:
-                    request = change_user(request, active_simulated_session.simulated_user)
-                    log_simulated_action(
-                        request,
-                        active_simulated_session,
-                        f"{request.real_user.username} simulating user: {request.user.username} accessed {request.path}"
-                    )
-                request.simulation_created_at = active_simulated_session.created_at
-            else:
+            if simulated_session and simulated_session.closed_at:
                 request.real_user = simulated_session.real_user
+                simulated_session = None
+
+            if simulated_session:
+                simulated_session.save()
+                active_simulated_session = SimulatedUserSession.objects.filter(
+                    simulated_session_key=session_key, closed_at__isnull=True
+                ).first()
+                if active_simulated_session and not simulated_session.hide_bar:
+                    request.real_user = active_simulated_session.real_user
+                    if active_simulated_session.simulated_user is None:
+                        request = change_user(request, AnonymousUser())
+                        log_simulated_action(
+                            request,
+                            active_simulated_session,
+                            f"{request.real_user.username} simulating AnonymousUser accessed {request.path}"
+                        )
+                    else:
+                        request = change_user(request, active_simulated_session.simulated_user)
+                        log_simulated_action(
+                            request,
+                            active_simulated_session,
+                            f"{request.real_user.username} simulating user: {request.user.username} accessed {request.path}"
+                        )
+                    request.simulation_created_at = active_simulated_session.created_at
+                else:
+                    request.real_user = simulated_session.real_user
+                    request = change_user(request, request.real_user)
+                    request.simulation_created_at = None
+            else:
                 request = change_user(request, request.real_user)
                 request.simulation_created_at = None
         else:
