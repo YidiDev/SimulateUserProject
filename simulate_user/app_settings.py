@@ -50,4 +50,4 @@ class SimulateUserSettings:
 
 
 # Create an instance of the class, so we can use its attributes
-app_settings = SimulateUserSettings()
+app_settings: SimulateUserSettings = SimulateUserSettings()
