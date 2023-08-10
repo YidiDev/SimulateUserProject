@@ -14,7 +14,7 @@ The SimulateUser Django app provides developers with a robust toolset to simulat
 
  - **Transparency with Notifications & Logs**: Stay informed about all simulation activities through comprehensive notifications and logs.
 
- - **Customizability with Settings**: Tweak the app behavior according to project requirements. It's important to note that this app should not be used in production environments due to potential security concerns.
+ - **Customizable with Settings**: Tweak the app behavior according to project requirements. It's important to note that this app should not be used in production environments due to potential security concerns.
 
  - **Extendable Template with UI**: An aesthetically pleasing user interface for switching users is available in the simulate_user_base.html template, which can be extended by any template in your project.
 
@@ -36,7 +36,7 @@ Ensure that you add the app's URL configurations to your project's urls.py:
 ```python
 urlpatterns = [
     ...
-    path('simulateuser/', include('simulateuser.urls')),
+    path('simulate_user/', include('simulate_user.urls')),
     ...
 ]
 ```
@@ -46,7 +46,7 @@ Ensure you add the necessary middleware and context manager for the app in the r
 ```python
 MIDDLEWARE = [
     ...
-    'simulateuser.middleware.SimulateUserMiddleware',
+    'simulate_user.middleware.SimulateUserMiddleware',
     ...
 ]
 ```
