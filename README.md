@@ -19,6 +19,11 @@ The SimulateUser Django app provides developers with a robust toolset to simulat
  - **Extendable Template with UI**: An aesthetically pleasing user interface for switching users is available in the simulate_user_base.html template, which can be extended by any template in your project.
 
 ## Setup Instructions
+1. **Install the App**:
+```
+pip install django-simulate-user
+```
+
 1. **Add the App**: 
 Include 'simulateuser' in your INSTALLED_APPS setting.
 
@@ -85,7 +90,7 @@ Start by forking the main repository to your personal GitHub account.
 Clone your forked repository to your local machine.
 
 ```
-git clone https://github.com/<Your-Username>/simulateuser.git
+git clone https://github.com/YidiSprei/SimulateUserProject.git
 ```
 
 3. **Create a New Branch**: 
