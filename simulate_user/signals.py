@@ -7,7 +7,7 @@ from .models import SimulatedUserSession
 
 
 @receiver(post_save, sender=SimulatedUserSession)
-def send_simulation_notification(sender, instance, created, **kwargs):
+def send_simulation_notification(sender, instance, created, **kwargs) -> None:
     """
     Sends an email notification to the real user when a new simulated user session is created.
 
@@ -34,19 +34,21 @@ def send_simulation_notification(sender, instance, created, **kwargs):
     """
 
     if created:  # Check if this is a new record
-        context = {
+        context: dict[str, any] = {
             'real_user': instance.real_user,
             'simulated_user': instance.simulated_user,
             'timestamp': instance.created_at
         }
 
         # Render the email subject and contents using the specified templates and context
-        subject = render_to_string('simulate_user/simulation_email_subject.txt', context).strip()
-        text_content = render_to_string('simulate_user/simulation_email.txt', context)
-        html_content = render_to_string('simulate_user/simulation_email.html', context)
+        subject: str = render_to_string('simulate_user/simulation_email_subject.txt', context).strip()
+        text_content: str = render_to_string('simulate_user/simulation_email.txt', context)
+        html_content: str = render_to_string('simulate_user/simulation_email.html', context)
 
         # Create a multipart email with both plain text and HTML content
-        email = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [instance.real_user.email])
+        email: EmailMultiAlternatives = EmailMultiAlternatives(
+            subject, text_content, settings.EMAIL_HOST_USER, [instance.real_user.email]
+        )
         email.attach_alternative(html_content, "text/html")
 
         # Send the email

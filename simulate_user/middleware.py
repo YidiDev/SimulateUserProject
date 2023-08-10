@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpRequest, HttpResponse
 from django.urls import reverse
 from .app_settings import app_settings
 from .utils import coordinate_request_with_simulated_session
@@ -21,7 +21,7 @@ class SimulateUserMiddleware:
     - __call__: Method that gets executed for each request before reaching the view.
     """
 
-    def __init__(self, get_response):
+    def __init__(self, get_response) -> None:
         """
         Initializes the middleware.
 
@@ -32,7 +32,7 @@ class SimulateUserMiddleware:
         self.get_response = get_response
 
     # noinspection PyProtectedMember
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponseForbidden | HttpResponse:
         """
         Method that gets executed for each request before it reaches the view.
 
@@ -44,7 +44,7 @@ class SimulateUserMiddleware:
         """
 
         # Update the request with the simulated user's session details.
-        request = coordinate_request_with_simulated_session(request)
+        request: HttpRequest = coordinate_request_with_simulated_session(request)
 
         # Check if ONLY_ALLOW_SIMULATED_GET_REQUESTS setting is enabled
         # and block non-GET requests during user simulation.
@@ -58,5 +58,5 @@ class SimulateUserMiddleware:
                 return HttpResponseForbidden("Only GET requests allowed in simulation mode")
 
         # Continue processing and get the response
-        response = self.get_response(request)
+        response: HttpResponse = self.get_response(request)
         return response

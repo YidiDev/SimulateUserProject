@@ -16,6 +16,6 @@ Make sure to include these URL patterns in the project's main `urls.py` file usi
 from django.urls import path
 from .views import switch_user
 
-urlpatterns = [
+urlpatterns: list = [
     path('switch_user/', switch_user, name='simulate_user_switch_user'),
 ]
