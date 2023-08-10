@@ -13,12 +13,12 @@ class SimulateUserConfig(AppConfig):
     Methods:
     - ready: This method is called when the application is ready. It's used here to import signals.
     """
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'simulate_user'
-    verbose_name = "Simulate Users"
+    default_auto_field: str = 'django.db.models.BigAutoField'
+    name: str = 'simulate_user'
+    verbose_name: str = "Simulate Users"
 
     # noinspection PyUnresolvedReferences
-    def ready(self):
+    def ready(self) -> None:
         """
         Import signals when the application is ready.
         This ensures that the signal handlers are connected when the app is loaded.

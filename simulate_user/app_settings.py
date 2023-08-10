@@ -35,7 +35,7 @@ class SimulateUserSettings:
     """
     def __getattr__(self, name):
         # Define default settings
-        defaults = {
+        defaults: dict[str, any] = {
             'SIMULATED_USER_CONTROL_CONDITION': 'is_staff',
             'PRIVATE_CONTENT_REPLACEMENT': 'HIDDEN FOR USER PRIVACY PURPOSES',
             'SIMULATED_SESSION_EXPIRY': 3600,
