@@ -3,3 +3,6 @@ simulateUserProject/
 .idea
 manage.py
 db.sqlite3
+build/
+dist/
+*.egg-info/
