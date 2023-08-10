@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='django-simulate-user',
     version='0.2',
-    packages=find_packages(),
+    packages=find_packages(exclude=['simulateUserProject']),
     include_package_data=True,
     license='MIT License',
     description='A Django app to simulate user sessions.',
