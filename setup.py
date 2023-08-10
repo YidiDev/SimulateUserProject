@@ -9,7 +9,7 @@ setup(
     description='A Django app to simulate user sessions.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/yidispreiyidienterprises/SimulateUserProject.git',
+    url='https://github.com/YidiSprei/SimulateUserProject.git',
     author='Yidi Sprei',
     author_email='yidi.sprei@infuzu.com',
     classifiers=[
