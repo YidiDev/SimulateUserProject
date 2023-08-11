@@ -40,7 +40,7 @@ class SimulateUserSettings:
             'PRIVATE_CONTENT_REPLACEMENT': 'HIDDEN FOR USER PRIVACY PURPOSES',
             'SIMULATED_SESSION_EXPIRY': 3600,
             'SIMULATED_SESSION_RETENTION': 14,
-            'ONLY_ALLOW_SIMULATED_GET_REQUESTS': True,
+            'ONLY_ALLOW_SIMULATED_GET_AND_HEAD_REQUESTS': True,
             'ENABLE_SIMULATE_USER': True,
             'SIMULATE_USER_AUTHENTICATION_BACKEND': 'django.contrib.auth.backends.ModelBackend'
         }

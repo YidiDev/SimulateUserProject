@@ -49,9 +49,9 @@ class SimulateUserMiddleware:
         # Check if ONLY_ALLOW_SIMULATED_GET_REQUESTS setting is enabled
         # and block non-GET requests during user simulation.
         # The 'simulate_user_switch_user' endpoint is exempted.
-        if app_settings.ONLY_ALLOW_SIMULATED_GET_REQUESTS:
+        if app_settings.ONLY_ALLOW_SIMULATED_GET_AND_HEAD_REQUESTS:
             if (
-                request.method != "GET" and
+                request.method not in ["GET", "HEAD"] and
                 request.real_user != request.user and
                 not request.path.startswith(reverse('simulate_user_switch_user'))
             ):
