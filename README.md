@@ -91,6 +91,34 @@ After integrating the app, run:
     python manage.py migrate
     ```
 
+## Usage
+- **Extend the Simulated User Base Template**:
+In order to make use of the Simulate User features, you must decide which pages on your website should have the Simulate User UI on it. Any page that you want to be able to be viewed in a simulated session should be extending the simulate_user_base.html template
+    ```html
+    {% extends 'simulate_user/simulate_user_base.html' %}
+
+    {% block headtitle %}
+        My App Title
+    {% endblock %}
+    {% block extrahead %}
+        Extra Head Content
+    {% endblock %}
+    
+    {% block maincontent %}
+        Actual Content
+    {% endblock %}
+    ```
+- **Simulate User and Session Data**:
+The Simulate User app, when set to do so will automatically set the request.user to be an authenticated version of the user you are simulating. Or if you chose unauthenticated, it will simulate request.user as an unauthenticated user.
+The app will also create an entirely separate session for the simulated user. When you access request.session of a simulated session, it will be the session of the simulated user and not the real user. You will always be able to access the real user by referencing request.real_user.
+The Simulate User app can switch back to the users real session and real user data by the user disabling the simulation in their UI or by logging out. Simulated session will also expire at a set time (by default 3600 seconds).
+
+- **Simulate User Logs**:
+For the purposes of ensuring the security and safety of your users. Superusers are able to see in their Django Admin Site a log of all simulated sessions and all actions taken while in simulation. Please be aware that these logs are set to delete after a set amount of time (by default 14 days) In order to ensure that they do not take up too much space in your database.
+
+- **Simulate User Notifications**:
+Simulate User is set to notify users by email when someone uses the Simulate User feature to simulate their account. This is meant to ensure transparency for your users. The default templates for these emails can be overwritten. Please read more about overwriting templates in Django documentation for more details.
+
 ## Configuration
 Simulate User has many different settings that you can control to ensure that your Simulate User experience is exactly the solution your project needs.
 
@@ -108,9 +136,9 @@ If you use an authentication backend other than the default backend, you should 
     ```
   
 - **Restrict Actions of Staff Members in Simulation Mode**:
-By default, Simulate User only allows GET requests to be done in simulation mode. This is for security and safety purposes. However, you can change this by toggling the setting:
+By default, Simulate User only allows GET and HEAD requests to be done in simulation mode. This is for security and safety purposes. However, you can change this by toggling the setting:
     ```python
-    ONLY_ALLOW_SIMULATED_GET_REQUESTS: bool = True
+    ONLY_ALLOW_SIMULATED_GET_AND_HEAD_REQUESTS: bool = True
     ```
   
 - **Set Custom Private Replacement Text**:
