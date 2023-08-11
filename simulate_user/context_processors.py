@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import QuerySet
+from django.db.models import Q
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils import timezone
@@ -52,16 +52,11 @@ def simulate_user_context(request: HttpRequest) -> dict[str, any]:
     else:
         simulated_user_pk: None = None
     if control_condition:
-        records: QuerySet[SimulatedUserSession] = SimulatedUserSession.objects.filter(
-            real_session_key=request.session.session_key
-        )
-        results_1: bool = records.filter(hide_bar=True).exists()
-
-        records: QuerySet[SimulatedUserSession] = SimulatedUserSession.objects.filter(
-            simulated_session_key=request.session.session_key
-        )
-        results_2: bool = records.filter(hide_bar=True).exists()
-        hide_bar: bool = results_1 or results_2
+        hide_bar: bool = SimulatedUserSession.objects.filter(
+            Q(real_session_key=request.session.session_key) |
+            Q(simulated_session_key=request.session.session_key),
+            hide_bar=True
+        ).exists()
     else:
         hide_bar: bool = True
     try:
