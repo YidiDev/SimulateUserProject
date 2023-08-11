@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import wraps
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.http import HttpRequest
 from django.utils import timezone
@@ -225,18 +226,57 @@ def change_user(request: HttpRequest, user: UserModel | AnonymousUser) -> HttpRe
         simulation_created_at: datetime | None = getattr(request, 'simulation_created_at', None)
         simulated_user_pk: str | None = getattr(request, 'simulated_user_pk', None)
         if isinstance(user, UserModel):
-            user.backend = app_settings.SIMULATE_USER_AUTHENTICATION_BACKEND
-            login(request, user)
-            request.session.save()
+            if check_user_simulation_permissions(request.real_user, user):
+                user.backend = app_settings.SIMULATE_USER_AUTHENTICATION_BACKEND
+                login(request, user)
+                request.session.save()
+            else:
+                raise PermissionDenied("You don't have permission to access this user.")
         else:
-            request.session.clear()
-            request.session.create()
-            request.user = AnonymousUser()
+            if check_user_simulation_permissions(request.real_user, AnonymousUser()):
+                request.session.clear()
+                request.session.create()
+                request.user = AnonymousUser()
+            else:
+                raise PermissionDenied("You don't have permission to access this user.")
         request.real_user = real_user
         request.simulation_created_at = simulation_created_at
         request.simulated_user_pk = simulated_user_pk
 
     return request
+
+
+def check_user_simulation_permissions(real_user: UserModel, simulated_user: UserModel) -> bool:
+    if isinstance(real_user, UserModel):
+        if isinstance(simulated_user, UserModel) or isinstance(simulated_user, AnonymousUser):
+            if isinstance(simulated_user, AnonymousUser):
+                return True
+            else:
+                permission_settings: list[dict[str, str]] = app_settings.SIMULATE_USER_PERMISSIONS
+                permission_settings.append(
+                    {"SIMULATED_USER_ATTRIBUTE": "_ALWAYS_TRUE", "REAL_USER_ATTRIBUTE": "is_staff"}
+                )
+                for setting in permission_settings:
+                    simulated_user_attribute: str = setting["SIMULATED_USER_ATTRIBUTE"]
+                    real_user_attribute: str = setting["REAL_USER_ATTRIBUTE"]
+                    if simulated_user_attribute == "_ALWAYS_TRUE":
+                        simulated_user_attribute_results: bool = True
+                    else:
+                        simulated_user_attribute_results = getattr(simulated_user, simulated_user_attribute, None)
+                        if type(simulated_user_attribute_results) is not bool:
+                            raise TypeError(f"Did not find {simulated_user_attribute} to be bool for simulated_user")
+                    real_user_attribute_results = getattr(real_user, real_user_attribute, None)
+                    if type(real_user_attribute_results) is not bool:
+                        raise TypeError(f"Did not find {real_user_attribute_results} to be bool for real_user")
+                    if simulated_user_attribute_results:
+                        return real_user_attribute_results
+                    else:
+                        continue
+
+        else:
+            raise TypeError("simulated_user must be an instance of your user model or AnonymousUser")
+    else:
+        raise TypeError("real_user must be an instance of your user model")
 
 
 def log_simulated_action(

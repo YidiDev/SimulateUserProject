@@ -165,6 +165,14 @@ By default, Simulate User is set to be enabled for all users who have the is_sta
     ```python
     SIMULATED_USER_CONTROL_CONDITION: str = 'is_staff'
     ```
+  
+- **Set Who Can Simulate Which Users**:
+By default, Simulate User is set to allow all staff members to simulate all users. However, you can customize this and make any users be able to simulate any users. This setting works based on attributes and it works in order lists. Simulate user will look for the setting SIMULATE_USER_PERMISSIONS and will go through it in order. This setting should contain a list of dictionaries. Each dictionary should contain two key, value pairs. The first key value pair should be SIMULATED_USER_ATTRIBUTE and a bool attribute in your user model. the second pair should be REAL_USER_ATTRIBUTE and a bool attribute of your user model. When checking if a user has permissions to simulate any given user, simulate user will go through the list and find the first simulated_user_attribute that the simulated user meets as true and then it will check the real user attribute for that setting for the real user and if it returns as true, permission will be granted, otherwise it will be denied.:
+    ```python
+    SIMULATE_USER_PERMISSIONS: list[dict[str, str]] = [
+        {"SIMULATED_USER_ATTRIBUTE": "is_active", "REAL_USER_ATTRIBUTE": "is_staff"}
+    ]    
+  ```
 
 ## Contributing
 As this is an open-source project hosted on GitHub, your contributions and improvements are welcome! Follow these general steps for contributing:

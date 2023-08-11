@@ -43,7 +43,10 @@ class SimulateUserSettings:
             'ONLY_ALLOW_SIMULATED_GET_AND_HEAD_REQUESTS': True,
             'ENABLE_SIMULATE_USER': True,
             'ENABLE_SIMULATE_USER_NOTIFICATIONS': True,
-            'SIMULATE_USER_AUTHENTICATION_BACKEND': 'django.contrib.auth.backends.ModelBackend'
+            'SIMULATE_USER_AUTHENTICATION_BACKEND': 'django.contrib.auth.backends.ModelBackend',
+            'SIMULATE_USER_PERMISSIONS': [
+                {"SIMULATED_USER_ATTRIBUTE": "is_active", "REAL_USER_ATTRIBUTE": "is_staff"}
+            ]
         }
 
         # Check if the setting is overridden in the project's settings
