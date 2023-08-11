@@ -65,6 +65,15 @@ class SimulateUserSettings:
         'SIMULATE_USER_PERMISSIONS': list
     }
 
+    def __init__(self):
+        if not getattr(
+                settings, 'DEBUG', False
+        ) and getattr(settings, 'ENABLE_SIMULATE_USER', self.defaults.get('ENABLE_SIMULATE_USER')):
+            print(
+                "WARNING: RUNNING IN PRODUCTION WITH SIMULATE USER ENABLED POSES SECURITY CONCERNS AND SIGNIFICANT "
+                "DELAYS IN LOAD TIME"
+            )
+
     def __getattr__(self, name: str) -> any:
         value = getattr(settings, name, self.defaults.get(name))
         expected_type = self.expected_types.get(name)
@@ -89,7 +98,6 @@ class SimulateUserSettings:
         attribute_type = type(getattr(UserModel, condition))
         if attribute_type != bool:
             raise ValueError(f"'{condition}' is not a boolean attribute of the User model.")
-
 
     def validate_user_permissions(self, permissions: list) -> None:
         """Validates the SIMULATE_USER_PERMISSIONS setting."""
