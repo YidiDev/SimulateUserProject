@@ -3,6 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from .app_settings import app_settings
 from .models import SimulatedUserSession
 
 
@@ -33,7 +34,7 @@ def send_simulation_notification(sender, instance, created, **kwargs) -> None:
     - timestamp: The time when the simulation started.
     """
 
-    if created:  # Check if this is a new record
+    if created and app_settings.ENABLE_SIMULATE_USER_NOTIFICATIONS:  # Check if this is a new record
         context: dict[str, any] = {
             'real_user': instance.real_user,
             'simulated_user': instance.simulated_user,

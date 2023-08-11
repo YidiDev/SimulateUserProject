@@ -42,6 +42,7 @@ class SimulateUserSettings:
             'SIMULATED_SESSION_RETENTION': 14,
             'ONLY_ALLOW_SIMULATED_GET_AND_HEAD_REQUESTS': True,
             'ENABLE_SIMULATE_USER': True,
+            'ENABLE_SIMULATE_USER_NOTIFICATIONS': True,
             'SIMULATE_USER_AUTHENTICATION_BACKEND': 'django.contrib.auth.backends.ModelBackend'
         }
 

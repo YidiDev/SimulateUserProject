@@ -129,6 +129,12 @@ We highly recommend against leaving Simulate User enabled in production.
     ENABLE_SIMULATE_USER: bool = True
     ```
   
+- **Enable or Disable Simulate User Notifications**: 
+By default, Simulate User Notifications are enabled. This means that Simulate User will notify an end user when they are being simulated. This can be toggled with the following setting but is highly recommended against for security purposes.
+    ```python
+    ENABLE_SIMULATE_USER_NOTIFICATIONS: bool = True
+    ```
+  
 - **Set Authentication Backend**:
 If you use an authentication backend other than the default backend, you should alter the simulate user backend with the path for the one that it should use. By default, it is set to use the django default authentication backend. However, if you use different backends, it might be necessary to make Simulate User use the correct one.
     ```python
