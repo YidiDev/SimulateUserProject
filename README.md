@@ -101,10 +101,10 @@ In order to make use of the Simulate User features, you must decide which pages 
 - **Simulate User and Session Data**:
 The Simulate User app, when set to do so will automatically set the request.user to be an authenticated version of the user you are simulating. Or if you chose unauthenticated, it will simulate request.user as an unauthenticated user.
 The app will also create an entirely separate session for the simulated user. When you access request.session of a simulated session, it will be the session of the simulated user and not the real user. You will always be able to access the real user by referencing request.real_user.
-The Simulate User app can switch back to the users real session and real user data by the user disabling the simulation in their UI or by logging out. Simulated session will also expire at a set time (by default 3600 seconds).
+The Simulate User app can switch back to the user's real session and real user data by the user disabling the simulation in their UI or by logging out. Simulated session will also expire at a set time (by default 3600 seconds).
 
 - **Simulate User Logs**:
-For the purposes of ensuring the security and safety of your users. Superusers are able to see in their Django Admin Site a log of all simulated sessions and all actions taken while in simulation. Please be aware that these logs are set to delete after a set amount of time (by default 14 days) In order to ensure that they do not take up too much space in your database.
+For the purposes of ensuring the security and safety of your users. Superusers are able to see in their Django Admin Site a log of all simulated sessions and all actions taken while in simulation. Please be aware that these logs are set to delete after a set amount of time (by default 14 days) in order to ensure that they do not take up too much space in your database.
 
 - **Simulate User Notifications**:
 Simulate User is set to notify users by email when someone uses the Simulate User feature to simulate their account. This is meant to ensure transparency for your users. The default templates for these emails can be overwritten. Please read more about overwriting templates in Django documentation for more details.
@@ -157,7 +157,7 @@ By default, Simulate User replaces all text in private tags with 'HIDDEN FOR USE
     ```
   
 - **Set Custom Session Settings**:
-By default, Simulate User sets all simulated sessions to last for a maximum of 3600 seconds. It also automatically deletes all simulated sessions and simulated session actions for 14 days. You can toggle those settings as follows:
+By default, Simulate User sets all simulated sessions to last for a maximum of 3600 seconds. It also automatically deletes all simulated sessions and simulated session actions after 14 days. You can toggle those settings as follows:
     ```python
     SIMULATED_SESSION_EXPIRY: int = 3600
     SIMULATED_SESSION_RETENTION: int =  14
