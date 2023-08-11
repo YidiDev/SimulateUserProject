@@ -9,16 +9,6 @@ The SimulateUser Django app provides developers with a robust toolset to simulat
 
 ### Features
 - **Private Tags Functionality**: Safeguard sensitive content in templates with `{% private %}` and `{% privateblock %}` tags.
-    ```html
-    <p>{% private 'Some Content that should be private' %}</p>
-    ```
-    ```html
-    {% privateblock %}
-    <p>Some Content that should be private</p>
-    <p>Some Content that should be private</p>
-    <p>Some Content that should be private</p>
-    {% endprivateblock %}
-    ```
 
  - **Fully Simulated Sessions**: Impersonate any user in the system, including anonymous users, with a complete session simulation.
 
@@ -118,6 +108,19 @@ For the purposes of ensuring the security and safety of your users. Superusers a
 
 - **Simulate User Notifications**:
 Simulate User is set to notify users by email when someone uses the Simulate User feature to simulate their account. This is meant to ensure transparency for your users. The default templates for these emails can be overwritten. Please read more about overwriting templates in Django documentation for more details.
+
+- **Set Certain Information as Private**:
+While in simulation mode, it might be the case that certain information is deemed private and only for the real user to see. When encountering such cases, you can make use of the private tags to ensure that private information is only seen by the real user.
+    ```html
+    <p>{% private 'Some Content that should be private' %}</p>
+    ```
+    ```html
+    {% privateblock %}
+    <p>Some Content that should be private</p>
+    <p>Some Content that should be private</p>
+    <p>Some Content that should be private</p>
+    {% endprivateblock %}
+    ```
 
 ## Configuration
 Simulate User has many different settings that you can control to ensure that your Simulate User experience is exactly the solution your project needs.
