@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-simulate-user',
-    version='1.0',
+    version='1.001',
     packages=find_packages(exclude=['simulateUserProject']),
     include_package_data=True,
     license='MIT License',
