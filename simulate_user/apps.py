@@ -24,3 +24,4 @@ class SimulateUserConfig(AppConfig):
         This ensures that the signal handlers are connected when the app is loaded.
         """
         from . import signals
+        from . import checks
