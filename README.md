@@ -1,6 +1,8 @@
 
 # SimulateUser Django App
 
+# Project Transferred to https://github.com/YidiSprei/DjangoMimicry.git
+
 ## General Details
 
 ### Description
